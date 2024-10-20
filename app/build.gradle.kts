@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp").version("1.6.10-1.0.4")
 }
 
 android {
@@ -59,6 +60,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+// Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Retrofit with moshi Converter
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    //moshi dependency
+    implementation("com.squareup.moshi:moshi:1.15.1")
+
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
