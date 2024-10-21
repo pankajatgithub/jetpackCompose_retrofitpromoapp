@@ -7,6 +7,7 @@ import com.squareup.moshi.JsonClass
 data class Character(
     @Json(name = "actor")
     val actor: String,
+
     @Json(name = "image")
     val image: String
 

@@ -4,14 +4,30 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.example.jetpackcompose_retrofitpromoapp.repository.CharacterRepo
+import com.example.jetpackcompose_retrofitpromoapp.retrofit.Character
+import com.example.jetpackcompose_retrofitpromoapp.retrofit.RetrofitInstance
 import com.example.jetpackcompose_retrofitpromoapp.ui.theme.JetpackCompose_retrofitpromoappTheme
+import com.example.jetpackcompose_retrofitpromoapp.viewmodel.CharacterViewModel
+
 //https://hp-api.onrender.com/api/characters - api response
 //https://square.github.io/retrofit/  - retrofit library details, GSON is popular but moshi converter is good for jetpack compose,
 //https://github.com/square/moshi
@@ -28,10 +44,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackCompose_retrofitpromoappTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val characterApi =
+                        RetrofitInstance.provideApi(RetrofitInstance.provideRetrofit())
+                    val characterRepo = CharacterRepo(characterApi)
+                    val characterViewModel = CharacterViewModel(characterRepo)
+                    MainScreen(characterViewModel)
                 }
             }
         }
@@ -39,17 +56,40 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainScreen(viewModel: CharacterViewModel) {
+    val characterZ by viewModel.state.collectAsState()
+
+    ActorsList(charaterList = characterZ)
+
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    JetpackCompose_retrofitpromoappTheme {
-        Greeting("Android")
+fun ActorsList(charaterList: List<Character>) {
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.padding(8.dp)
+    ) {
+        items(items = charaterList) { item ->
+            CardItem(character = item)
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun CardItem(character: Character) {
+    Column() {
+
+        GlideImage(
+            model = character.image,
+            contentDescription = "character image",
+            modifier = Modifier
+                .padding(4.dp)
+                .size(width = 140.dp, height = 180.dp)
+        )
+
+        Text(text = character.actor, fontSize = 20.sp)
+
     }
 }

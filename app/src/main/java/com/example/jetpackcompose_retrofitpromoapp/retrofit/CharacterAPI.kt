@@ -4,6 +4,6 @@ import retrofit2.http.GET
 
 interface CharacterAPI {
 
-@GET("api/characters") //end point
+@GET("characters") //end point
 suspend fun getCharacters():List<Character>
 }

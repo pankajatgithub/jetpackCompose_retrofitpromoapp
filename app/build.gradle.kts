@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -66,11 +68,12 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     //moshi dependency
-    implementation("com.squareup.moshi:moshi:1.15.1")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
-
+    //glide
+    implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,6 +1,7 @@
 package com.example.jetpackcompose_retrofitpromoapp.retrofit
 
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -11,6 +12,11 @@ object RetrofitInstance {
     }
 
     fun provideRetrofit(): Retrofit.Builder{
-        return Retrofit.Builder().baseUrl("https://hp-api.onrender.com/api/").addConverterFactory(MoshiConverterFactory.create())
+         val moshi =
+            Moshi.Builder()
+                .addLast(KotlinJsonAdapterFactory())
+                .build()
+        return Retrofit.Builder().addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl("https://hp-api.onrender.com/api/")
     }
 }
