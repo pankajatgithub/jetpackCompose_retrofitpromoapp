@@ -58,8 +58,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(viewModel: CharacterViewModel) {
     val characterZ by viewModel.state.collectAsState()
+//filterring the actors and image only items, remove empty items
 
-    ActorsList(charaterList = characterZ)
+   val nonEmptyList = mutableListOf<Character>()
+    characterZ.forEach{
+
+        if (it.image != ""){
+            nonEmptyList.add(it)
+        }
+    }
+
+    ActorsList(charaterList = nonEmptyList)
 
 }
 
